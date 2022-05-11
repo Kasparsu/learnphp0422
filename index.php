@@ -1,14 +1,21 @@
 <?php
-$num = 29;
-$name = 'Kaspar';
-$string = "Tere minu nimi on $name ja ma olen $num aastat vana";
-$string = 'Tere minu nimi on ' . $name . ' ja ma olen ' . $num .' aastat vana';
-$array = array(1, 2, 3, 4, 5);
-$array = [1, 2, 3, 4, 5];
-$array[] = 6;
-array_push($array, 7);
-$array = ['name' => 'kaspar', 'age' => 29, 2 => 1, 2, 3, 15 => 4, 5];
-var_dump($array);
-foreach($array as $k => $v){
-    var_dump($k . $v);
-}
+$age = $_GET['age'] ?? 'Unknown';
+$name = $_GET['name'] ?? 'Unknown';
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <input type="text" name="name" placeholder="Sisesta nimi">
+        <input type="number" name="age" placeholder="Sisesta vanus">
+        <input type="submit" value="Saada">
+    </form>
+    <h1>Tere minu nimi on <?=$name?> ja ma olen <?=$age?> aastat vana</h1>
+</body>
+</html>
