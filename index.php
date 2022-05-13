@@ -1,66 +1,49 @@
 <?php
 
-class Person {
-    public $name;
-    public $phone;
-    public $email;
+interface Logger {
+    public function log(string $message);
+}
 
-    public function sendMail(){
-        echo "Sent mail to $this->name at $this->email";
+class ConsoleLogger implements Logger {
+    public function log(string $message){
+        echo $message . "\n";
     }
 }
 
-$person = new Person();
-$person->name = 'Kaspar';
-$person->email = 'email@email.email';
-$person->sendMail();
-
-class Employee extends Person {
-    protected $salary;
-
-    public function netoSalary(){
-        return $this->salary * 0.8;
+class FileLogger implements Logger {
+    private $file;
+    public function setFile(string $name){
+        $this->file = $name;
     }
+    public function log(string $message){
+        $file = fopen($this->file, 'a');
+        fwrite($file, $message . "\n");
+        fclose($file);
+    }
+}
 
-    public function setSalary($salary){
-        if($salary>360){
-            $this->salary = $salary;
-        } else {
-            $this->salary = 360;
+class TaskRunner {
+    protected $logger;
+    public function __construct(Logger $logger){
+        $this->logger = $logger;
+    }
+    public function task(){
+        for($i=0; $i<10; $i++){
+            $this->logger->log('' . $i);
         }
     }
-    public function getSalary(){
-        return $this->salary;
+}
+
+
+class NothingLogger implements Logger {
+    public function log(string $message){
+
     }
 }
 
-class Manager extends Employee {
-    use GetDiscount;
-    public $bonus;
-    public function getSalary(){
-        return $this->salary + $this->bonus;
-    }
-}
 
-$worker = new Employee();
-$worker->name = 'Pets';
-$worker->email = 'worker@work.email';
-$worker->setSalary(2000);
-$worker->sendMail();
-var_dump($worker->netoSalary());
-$manager = new Manager();
-$manager->bonus = 400;
-$manager->setSalary(5000);
-var_dump($manager->getSalary());
-var_dump($manager);
-class Client extends Person {
-    public $orders;
-}
 
-class GoldClient extends Client {
-    use GetDiscount;
-}
-
-trait GetDiscount {
-    public $discount;
-}
+$logger = new FileLogger();
+$logger->setFile('log2.txt');
+$runner = new TaskRunner($logger);
+$runner->task();
